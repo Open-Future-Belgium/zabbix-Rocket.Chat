@@ -1,0 +1,6 @@
+# HOW TO #
+
+* Copy the script to the alertscript path
+* Create a new media type with the name of the script
+* Create the action in Zabbix
+* Create in Rocket.Chat the correct Channel
