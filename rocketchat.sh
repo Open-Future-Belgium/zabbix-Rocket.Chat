@@ -40,4 +40,4 @@ payload='{"username":"'$username'","emoji":"'$icon_emoji'","attachments":[{"colo
 curl -X POST -H 'Content-Type: application/json' --data "${payload}" $url
 
 # Write errors to log
-echo "curl -X POST -H 'Content-Type: application/json' --data "${payload}" $url" 2>>${LOGFILE} 2>&1
+echo "curl -X POST -H 'Content-Type: application/json' --data "${payload}" $url" 1>>${LOGFILE} 2>&1
