@@ -1,6 +1,31 @@
 # HOW TO #
 
+* Create a new channel in Rocket.Chat and copy the token
+
 * Copy the script to the alertscript path
+
 * Create a new media type with the name of the script
+$1 = {ALERT.SENDTO} 
+$2 = {ALERT.SUBJECT}
+$3 = {ALERT.MESSAGE}
+
+* Add media to the correct user
+type : rocketchat script
+send to: the token of the rocketchat channel
+
 * Create the action in Zabbix
-* Create in Rocket.Chat the correct Channel
+
+** Operation:
+Default subject: {TRIGGER.STATUS}
+Default message: {EVENT.NAME} ({TRIGGER.SEVERITY}) on {HOST.HOST}
+
+** Recovery Operation
+Default subject: {TRIGGER.STATUS}
+Default message: {EVENT.NAME} ({TRIGGER.SEVERITY}) on {HOST.HOST}
+
+** Update Operations
+Default subject: UPDATE
+Default message: {USER.FULLNAME} acknowledged problem at {ACK.DATE} {ACK.TIME} with the following message: {ACK.MESSAGE}. {EVENT.NAME} ({TRIGGER.SEVERITY}) on {HOST.HOST}
+
+!! (make sure it fits on 1 line no enters, rocketchat will not like it and refuse to print anything) !!
+
