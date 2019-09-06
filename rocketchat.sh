@@ -1,23 +1,24 @@
 #!/bin/bash
 
 # Rocket.Chat incoming web-hook URL and user name
-url='url for the incoming webhook'
+url="https://rocketchaturl/hooks/$1"
 username='zabbix'
 icon_emoji=':grinning:'
 LOGFILE="/var/log/zabbix/zabbix-rocketchat.log"
 
 ## Values received by this script:
-# To = $1 (RocketChat channel or user to send the message to, specified in the Zabbix web interface; "@username" or "#channel")
+# To = $1 (RocketChat Channel Token )
 # Subject = $2 (usually either OK or PROBLEM)
 # Message = $3 (whatever message the Zabbix action sends, preferably something like "Zabbix server is unreachable for 5 minutes - Zabbix server (127.0.0.1)")
 
-# Get the Mattermost channel or user ($1) and Zabbix subject ($2 - hopefully either PROBLEM or RECOVERY)
-to="$1"
+# Get the Rocketchat zabbix subject ($2 - hopefully either PROBLEM or RECOVERY)
 subject="$2"
 
-# Change color emoji depending on the subject - Green (RECOVERY), Red (PROBLEM)
+# Change color emoji depending on the subject - Green (RECOVERY), Red (PROBLEM), Yellow (UPDATE)
 if [[ "$subject" == *"OK"* ]]; then
         color="#00ff33"
+elif [[ "$subject" == *"UPDATE"* ]]; then
+        color="#ffcc00"
 elif [[ "$subject" == *"PROBLEM"* ]]; then
         color="#ff2a00"
 fi
@@ -25,6 +26,8 @@ fi
 
 if [[ "$subject" == *"OK"* ]]; then
         icon_emoji=':grinning:'
+elif  [[ "$subject" == *"UPDATE"* ]]; then
+        icon_emoji=':warning:'
 elif  [[ "$subject" == *"PROBLEM"* ]]; then
         icon_emoji=':slight_frown:'
 fi
@@ -40,4 +43,4 @@ payload='{"username":"'$username'","emoji":"'$icon_emoji'","attachments":[{"colo
 curl -X POST -H 'Content-Type: application/json' --data "${payload}" $url
 
 # Write errors to log
-echo "curl -X POST -H 'Content-Type: application/json' --data "${payload}" $url" 2>>${LOGFILE} 2>&1
+echo "curl -X POST -H 'Content-Type: application/json' --data "${payload}" $url" >>${LOGFILE}
